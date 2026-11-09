@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Technology (CS35302) | Learning Portal</title>
+  
+  <!-- Modern Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #eef2ff;
+      --accent-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%);
+      --card-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.75) 100%);
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --border-focus: #818cf8;
+      --success: #10b981;
+      --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+      --shadow-lg: 0 20px 35px -10px rgba(79, 70, 229, 0.15);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+    }
+
+    /* Dark Mode Theme Variables */
+    body.dark-mode {
+      --bg: #090d16;
+      --surface: #111827;
+      --card-gradient: linear-gradient(180deg, rgba(17, 24, 39, 0.95) 0%, rgba(15, 23, 42, 0.85) 100%);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #1f293d;
+      --primary-light: #1e1b4b;
+      --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      scroll-behavior: smooth;
+      transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.06) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      line-height: 1.65;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Sticky Navbar with Glassmorphism */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.85rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    body.dark-mode header {
+      background: rgba(17, 24, 39, 0.85);
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      background: var(--accent-gradient);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+
+    .brand-text h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .brand-text p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    /* Dark Mode Toggle Button */
+    .theme-toggle-btn {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      color: var(--text-main);
+      padding: 0.5rem 0.8rem;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .theme-toggle-btn:hover {
+      border-color: var(--primary);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1060px;
+      margin: 2.2rem auto;
+      padding: 0 1.5rem;
+      flex: 1;
+      width: 100%;
+    }
+
+    /* View Transitions */
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+      animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Hero Banner */
+    .hero {
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 0.35rem 0.9rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      border: 1px solid var(--border);
+      margin-bottom: 0.85rem;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.6rem;
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    /* Search Bar Wrapper */
+    .search-wrapper {
+      max-width: 650px;
+      margin: 0 auto 2.5rem auto;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 1rem 1.4rem 1rem 3.1rem;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 50px;
+      font-size: 0.98rem;
+      color: var(--text-main);
+      outline: none;
+      box-shadow: var(--shadow-md);
+      transition: all 0.25s ease;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1.2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    /* Unit Cards Grid */
+    .unit-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.8rem;
+    }
+
+    .unit-card {
+      background: var(--card-gradient);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.8rem;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .unit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--accent-gradient);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .unit-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    .unit-card:hover::before {
+      opacity: 1;
+    }
+
+    .unit-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .unit-pill {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+    }
+
+    .duration-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+    }
+
+    .unit-card-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.75rem;
+      line-height: 1.3;
+    }
+
+    .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin: 1.2rem 0 1.8rem 0;
+    }
+
+    .tag-item {
+      background: var(--bg);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.3rem 0.65rem;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+    }
+
+    .card-action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: var(--surface);
+      color: var(--primary);
+      border: 1.5px solid var(--border);
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .unit-card:hover .card-action-btn {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    }
+
+    /* Notes Container */
+    .notes-wrapper {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 3rem 2.8rem;
+      box-shadow: var(--shadow-md);
+      position: relative;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .breadcrumb span {
+      cursor: pointer;
+    }
+
+    .breadcrumb span:hover {
+      color: var(--primary);
+    }
+
+    .notes-header {
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 1.8rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .notes-header h2 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .notes-header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    /* Content Typography & Sections */
+    .topic-card {
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .topic-card h3 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .topic-number {
+      background: var(--primary-light);
+      color: var(--primary);
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+
+    .topic-card p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      line-height: 1.7;
+    }
+
+    .info-callout {
+      background: var(--bg);
+      border-left: 4px solid var(--primary);
+      padding: 1.2rem 1.4rem;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin: 1.2rem 0;
+      color: var(--text-main);
+      border-top: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Code Block */
+    .code-container {
+      background: #0b0f19;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: 1.4rem 0;
+      border: 1px solid #1e293d;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    .code-header {
+      background: #111827;
+      padding: 0.55rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      border-bottom: 1px solid #1e293d;
+    }
+
+    pre code {
+      display: block;
+      padding: 1.2rem;
+      color: #f1f5f9;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+
+    /* Comparison Table Styling */
+    .styled-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .styled-table th {
+      background: var(--bg);
+      color: var(--text-main);
+      font-weight: 700;
+      padding: 0.85rem 1.2rem;
+      text-align: left;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .styled-table td {
+      padding: 0.85rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    /* Three-Button Bottom Navigation */
+    .navigation-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 3.5rem;
+      padding-top: 2rem;
+      border-top: 2px solid var(--border);
+      gap: 1rem;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 0.85rem 1.6rem;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      filter: grayscale(1);
+    }
+
+    .btn-outline {
+      background: var(--surface);
+      color: var(--text-main);
+      border: 1.5px solid var(--border);
+    }
+
+    .btn-outline:hover:not(:disabled) {
+      background: var(--bg);
+      border-color: var(--border-focus);
+    }
+
+    .btn-solid-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
+    }
+
+    .btn-solid-primary:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+    }
+
+    .btn-finish {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-finish:hover {
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+    }
+
+    /* Modal for End of Syllabus */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      max-width: 480px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
+      border: 1px solid var(--border);
+      animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalPop {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header {
+        padding: 0.8rem 1rem;
+      }
+      .notes-wrapper {
+        padding: 1.8rem 1.2rem;
+      }
+      .hero h1 {
+        font-size: 1.9rem;
+      }
+      .navigation-bar {
+        flex-direction: column;
+      }
+      .nav-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header with Dark Mode Switch -->
+  <header>
+    <div class="brand-container" onclick="goToView('home')">
+      <div class="brand-logo">Q</div>
+      <div class="brand-text">
+        <h2>Quantum School of Technology</h2>
+        <p>B.Tech CSE • 5th Semester • Web Technology</p>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle Theme">
+        <span id="themeIcon">🌙</span> <span style="font-size: 0.85rem;">Dark</span>
+      </button>
+      <button class="nav-btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="goToView('home')">
+        🏠 Home
+      </button>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- VIEW 0: SYLLABUS DASHBOARD -->
+    <div id="view-home" class="view active">
+      <div class="hero">
+        <div class="hero-badge">Course Code: CS35302</div>
+        <h1>Web Technology Portal</h1>
+        <p>Quantum University CSE 5th Semester comprehensive syllabus notes, interactive architecture flows, and core protocols.</p>
+      </div>
+
+      <!-- Live Search Bar -->
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input 
+          type="text" 
+          id="topicSearch" 
+          class="search-input" 
+          placeholder="Search topics, protocols, or units... (e.g. DNS, AJAX, SAX, 5G)" 
+          onkeyup="filterTopics()"
+        />
+      </div>
+
+      <!-- Unit Cards Grid -->
+      <div class="unit-grid" id="unitGrid">
+
+        <!-- Unit 1 Card -->
+        <div class="unit-card" onclick="goToView('unit-1')">
+          <div>
+            <div class="unit-card-header">
+              <span class="unit-pill">Unit 01</span>
+              <span class="duration-badge">⏱ 7 Hours</span>
+            </div>
+            <div class="unit-card-title">Internet Architecture & Web Protocols</div>
+            <div class="tag-cloud">
+              <span class="tag-item">History of Internet</span>
+              <span class="tag-item">WWW & HTML</span>
+              <span class="tag-item">HTTP & SMTP</span>
+              <span class="tag-item">POP3 / MIME / IMAP</span>
+              <span class="tag-item">DNS Resolution</span>
+              <span class="tag-item">Web Browsers</span>
+              <span class="tag-item">Web Servers</span>
+            </div>
+          </div>
+          <button class="card-action-btn">Open Unit 1 Notes →</button>
+        </div>
+
+        <!-- Unit 2 Card -->
+        <div class="unit-card" onclick="goToView('unit-2')">
+          <div>
+            <div class="unit-card-header">
+              <span class="unit-pill">Unit 02</span>
+              <span class="duration-badge">⏱ 8 Hours</span>
+            </div>
+            <div class="unit-card-title">Client-Side Tech, DHTML & XML</div>
+            <div class="tag-cloud">
+              <span class="tag-item">Lists, Tables & Forms</span>
+              <span class="tag-item">DHTML with JS</span>
+              <span class="tag-item">CSS & DTD</span>
+              <span class="tag-item">XML Schemas (XSD)</span>
+              <span class="tag-item">Object Models</span>
+              <span class="tag-item">DOM vs SAX</span>
+            </div>
+          </div>
+          <button class="card-action-btn">Open Unit 2 Notes →</button>
+        </div>
+
+        <!-- Unit 3 Card -->
+        <div class="unit-card" onclick="goToView('unit-3')">
+          <div>
+            <div class="unit-card-header">
+              <span class="unit-pill">Unit 03</span>
+              <span class="duration-badge">⏱ 7 Hours</span>
+            </div>
+            <div class="unit-card-title">Web Services & AJAX Architecture</div>
+            <div class="tag-cloud">
+              <span class="tag-item">Web Services Intro</span>
+              <span class="tag-item">SOAP / WSDL / UDDI</span>
+              <span class="tag-item">Service Deployment</span>
+              <span class="tag-item">AJAX Async Engine</span>
+              <span class="tag-item">CORBA & ORB</span>
+            </div>
+          </div>
+          <button class="card-action-btn">Open Unit 3 Notes →</button>
+        </div>
+
+        <!-- Unit 4 Card -->
+        <div class="unit-card" onclick="goToView('unit-4')">
+          <div>
+            <div class="unit-card-header">
+              <span class="unit-pill">Unit 04</span>
+              <span class="duration-badge">⏱ 7 Hours</span>
+            </div>
+            <div class="unit-card-title">Web 2.0, Web 3.0 & Semantic Web</div>
+            <div class="tag-cloud">
+              <span class="tag-item">Social Web (Wikis/Blogs)</span>
+              <span class="tag-item">Ruby on Rails & APIs</span>
+              <span class="tag-item">Semantic Web & RDF</span>
+              <span class="tag-item">Recommender Engines</span>
+              <span class="tag-item">Edge Computing</span>
+              <span class="tag-item">Dark Mode</span>
+            </div>
+          </div>
+          <button class="card-action-btn">Open Unit 4 Notes →</button>
+        </div>
+
+        <!-- Unit 5 Card -->
+        <div class="unit-card" onclick="goToView('unit-5')">
+          <div>
+            <div class="unit-card-header">
+              <span class="unit-pill">Unit 05</span>
+              <span class="duration-badge">⏱ 7 Hours</span>
+            </div>
+            <div class="unit-card-title">Web 4.0, DWeb & Emerging Technologies</div>
+            <div class="tag-cloud">
+              <span class="tag-item">AI-Powered Web</span>
+              <span class="tag-item">Decentralized Web (DWeb)</span>
+              <span class="tag-item">Blockchain Integration</span>
+              <span class="tag-item">IoT in Web</span>
+              <span class="tag-item">AR / VR (WebXR)</span>
+              <span class="tag-item">Impact of 5G</span>
+            </div>
+          </div>
+          <button class="card-action-btn">Open Unit 5 Notes →</button>
+        </div>
+
+      </div>
+
+      <!-- No Results Message -->
+      <div id="noResults" style="display: none; text-align: center; padding: 3rem; color: var(--text-muted);">
+        <p style="font-size: 1.2rem; font-weight: 600;">No matching topics found.</p>
+        <p style="font-size: 0.9rem;">Try searching for another keyword like "HTTP", "CSS", or "Blockchain".</p>
+      </div>
+    </div>
+
+    <!-- VIEW 1: UNIT 1 NOTES -->
+    <div id="view-unit-1" class="view">
+      <div class="notes-wrapper">
+        <div class="breadcrumb">
+          <span onclick="goToView('home')">Syllabus</span> / <strong>Unit 1: Internet & Protocols</strong>
+        </div>
+        <div class="notes-header">
+          <h2>Unit 1: Internet & Web Protocols</h2>
+          <p>Quantum School of Technology • Duration: 7 Hours</p>
+        </div>
+
+        <div class="topic-card">
+          <h3><span class="topic-number">1</span> History of the Internet & World Wide Web (WWW)</h3>
+          <p>The journey of interconnected computing originated with <strong>ARPANET</strong> (1969), funded by DARPA, pioneering packet-switching networks over traditional circuit-switched telephone lines.</p>
+          <div class="info-callout">
+            <strong>Key Distinction:</strong> The <em>Internet</em> is the global physical infrastructure of hardware cables, routers, and servers. The <em>World Wide Web</em> (invented by Sir Tim Berners-Lee in 1989 at CERN) is an application service built on top of the Internet using HTTP and HTML.
+          </div>
+        </div>
+
+        <div class="topic-card">
+          <h3><span class="topic-number">2</span> Core Application Protocols: HTTP, SMTP, POP3, MIME, IMAP</h3>
+          <p>Internet communications rely on specialized application layer protocols defined across TCP/IP stacks:</p>
+          
+          <table class="styled-table">
+            <thead>
+              <tr>
+                <th>Protocol</th>
+                <th>Port</th>
+                <th>Primary Function</th>
+                <th>Key Characteristic</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>HTTP / HTTPS</strong></td>
+                <td>80 / 443</td>
+                <td>Web resource transfer</td>
+                <td>Stateless request-response architecture</td>
+              </tr>
+              <tr>
+                <td><strong>SMTP</strong></td>
+                <td>25 / 587</td>
+                <td>Sending / pushing mail</td>
+                <td>Server-to-server mail propagation</td>
+              </tr>
+              <tr>
+                <td><strong>POP3</strong></td>
+                <td>110 / 995</td>
+                <td>Retrieving mail locally</td>
+                <td>Downloads and deletes from remote mailbox</td>
+              </tr>
+              <tr>
+                <td><strong>IMAP</strong></td>
+                <td>143 / 993</td>
+                <td>Syncing remote mail</td>
+                <td>Keeps multi-device mail in continuous sync</td>
+              </tr>
+            </tbody>
+          </table>
+          <p><strong>MIME (Multipurpose Internet Mail Extensions):</strong> Extends standard ASCII mail formats to allow multimedia, audio, and attachments.</p>
+        </div>
+
+        <div class="topic-card">
+          <h3><span class="topic-number">3</span> Domain Name Server (DNS) & Web Browsers</h3>
+          <p>The <strong>DNS</strong> resolves human-readable domain names into machine IP addresses.</p>
+          <div class="code-container">
+            <div class="code-header"><span>DNS Resolution Workflow</span><span>Architecture</span></div>
+            <pre><code>Browser Cache ──> OS Cache ──> Recursive Resolver ──> Root DNS ──> TLD Server (.in) ──> Authoritative DNS</code></pre>
+          </div>
+          <p><strong>Web Browsers:</strong> Client programs comprising rendering engines (Blink, WebKit, Gecko) and JavaScript engines (V8, SpiderMonkey) to parse and render documents.</p>
+        </div>
+
+        <!-- Last Topic in Unit 1 -->
+        <div class="topic-card">
+          <h3><span class="topic-number">4</span> Web Servers</h3>
+          <p>A Web Server is hardware and software that accepts HTTP/HTTPS requests from clients and responds with static HTML/CSS files or dynamic application data.</p>
+          <div class="info-callout">
+            <strong>Popular Servers:</strong> Apache HTTP Server (process/thread-per-connection), Nginx (asynchronous event-driven architecture), and Microsoft IIS.
+          </div>
+        </div>
+
+        <!-- 3-Button Navigation for Unit 1 -->
+        <div class="navigation-bar">
+          <button class="nav-btn btn-outline" disabled>← Previous</button>
+          <button class="nav-btn btn-outline" onclick="goToView('home')">🏠 Home / Syllabus</button>
+          <button class="nav-btn btn-solid-primary" onclick="goToView('unit-2')">Next: Unit 2 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 2: UNIT 2 NOTES -->
+    <div id="view-unit-2" class="view">
+      <div class="notes-wrapper">
+        <div class="breadcrumb">
+          <span onclick="goToView('home')">Syllabus</span> / <strong>Unit 2: Client-Side Technologies & XML</strong>
+        </div>
+        <div class="notes-header">
+          <h2>Unit 2: Client-Side Technologies & XML</h2>
+          <p>Quantum School of Technology • Duration: 8 Hours</p>
+        </div>
+
+        <div class="topic-card">
+          <h3><span class="topic-number">1</span> Structural HTML: Lists, Tables, Images, Forms, Frames</h3>
+          <p>HTML delivers structured semantics for the web. Forms capture user inputs and transmit data payloads to server routes:</p>
+          <div class="code-container">
+            <div class="code-header"><span>HTML Form Structure</span><span>HTML5</span></div>
+            <pre><code>&lt;form action="/submit-student" method="POST"&gt;
+  &lt;label for="roll"&gt;Roll Number:&lt;/label&gt;
+  &lt;input type="text" id="roll" name="student_roll" required /&gt;
+  &lt;button type="submit"&gt;Register Record&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+          </div>
+        </div>
+
+        <div class="topic-card">
+          <h3><span class="topic-number">2</span> DHTML with JavaScript & Cascading Style Sheets (CSS)</h3>
+          <p>Dynamic HTML (DHTML) unites HTML, CSS, JavaScript, and the DOM. It enables inline layout mutations and animated events directly without reloading the page.</p>
+        </div>
+
+        <div class="topic-card">
+          <h3><span class="topic-number">3</span> XML Document Type Definition (DTD) & XML Schemas</h3>
+          <p>XML separates content from presentation. Schemas validate document structure:</p>
+          <ul style="margin-left: 1.5rem; color: var(--text-muted); margin-bottom: 1rem;">
+            <li><strong>DTD:</strong> Older SGML-derived validation syntax with limited data typing support.</li>
+            <li><strong>XSD (XML Schema Definition):</strong> Native XML syntax supporting precise data types, namespaces, and validation rules.</li>
+          </ul>
+        </div>
+
+        <!-- Last Topic in Unit 2 -->
+        <div class="topic-card">
+          <h3><span class="topic-number">4</span> XML Processors: DOM vs SAX</h3>
+          <p>Two distinct APIs exist to parse and navigate XML documents:</p>
+          <table class="styled-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>DOM (Document Object Model)</th>
+                <th>SAX (Simple API for XML)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Model Type</strong></td>
+                <td>Tree-based (In-Memory)</td>
+                <td>Event-driven (Streaming)</td>
+              </tr>
+              <tr>
+                <td><strong>Memory Consumption</strong></td>
+                <td>High (loads full document)</td>
+                <td>Extremely Low (line-by-line)</td>
+              </tr>
+              <tr>
+                <td><strong>Navigation</strong></td>
+                <td>Bidirectional read/write</td>
+                <td>Forward-only, read-only</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 3-Button Navigation for Unit 2 -->
+        <div class="navigation-bar">
+          <button class="nav-btn btn-outline" onclick="goToView('unit-1')">← Previous: Unit 1</button>
+          <button class="nav-btn btn-outline" onclick="goToView('home')">🏠 Home / Syllabus</button>
+          <button class="nav-btn btn-solid-primary" onclick="goToView('unit-3')">Next: Unit 3 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 3: UNIT 3 NOTES -->
+    <div id="view-unit-3" class="view">
+      <div class="notes-wrapper">
+        <div class="breadcrumb">
+          <span onclick="goToView('home')">Syllabus</span> / <strong>Unit 3: Web Services & AJAX</strong>
+        </div>
+        <div class="notes-header">
+          <h2>Unit 3: Web Services & AJAX Architecture</h2>
+          <p>Quantum School of Technology • Duration: 7 Hours</p>
+        </div>
+
+        <div class="topic-card">
+          <h3><span class="topic-number">1</span> Web Services Architecture: SOAP, WSDL, UDDI</h3>
+          <ul style="margin-left: 1.5rem; color: var(--text-muted); margin-bottom: 1rem;">
+            <li><strong>SOAP:</strong> XML envelope specification for protocol negotiation and RPC calls.</li>
+            <li><strong>WSDL:</strong> Machine-readable XML definition detailing service ports, data types, and bindings.</li>
+            <li><strong>UDDI:</strong> Central registry index enabling automated discovery of distributed enterprise services.</li>
+          </ul>
+        </div>
+
+        <div class="topic-card">
+          <h3><span class="topic-number">2</span> Developing and Deploying Web Services</h3>
+          <p>Services are implemented via contract-first or code-first approaches, deployed onto application runtimes (Tomcat, GlassFish), and exposed over standardized URIs.</p>
+        </div>
+
+        <div class="topic-card">
+          <h3><span class="topic-number">3</span> AJAX: Performance & Programming</h3>
+          <p>AJAX allows web pages to update asynchronously by exchanging data with a web server in the background, avoiding full-page reloads:</p>
+          <div class="code-container">
+            <div class="code-header"><span>Async Fetch Pattern</span><span>JavaScript ES6</span></div>
+            <pre><code>async function fetchExamDetails(subjectCode) {
+  try {
+    const res = await fetch(`/api/syllabus?code=${subjectCode}`);
+    const data = await res.json();
+    console.log("Exam Data Loaded:", data);
+  } catch (err) {
+    console.error("Network Exception:", err);
+  }
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- Last Topic in Unit 3 -->
+        <div class="topic-card">
+          <h3><span class="topic-number">4</span> CORBA (Common Object Request Broker Architecture)</h3>
+          <p>An enterprise distributed computing standard defined by OMG. The <strong>Object Request Broker (ORB)</strong> acts as the communication bus mediating requests between objects across different operating systems and languages.</p>
+        </div>
+
+        <!-- 3-Button Navigation for Unit 3 -->
+        <div class="navigation-bar">
+          <button class="nav-btn btn-outline" onclick="goToView('unit-2')">← Previous: Unit 2</button>
+          <button class="nav-btn btn-outline" onclick="goToView('home')">🏠 Home / Syllabus</button>
+          <button class="nav-btn btn-solid-primary" onclick="goToView('unit-4')">Next: Unit 4 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 4: UNIT 4 NOTES -->
+    <div id="view-unit-4" class="view">
+      <div class="notes-wrapper">
+        <div class="breadcrumb">
+          <span onclick="goToView('home')">Syllabus</span> / <strong>Unit 4: Web 2.0 & Web 3.0</strong>
+        </div>
+        <div class="notes-header">
+          <h2>Unit 4: Web 2.0, Web 3.0 & Semantic Web</h2>
+          <p>Quantum School of Technology • Duration: 7 Hours</p>
+        </div>
+
+        <div class="topic-card">
+          <h3><span class="topic-number">1</span> Web 2.0: Interactive and Social Web</h3>
+          <p>The transformation from static read-only pages to user-contributed social ecosystems (Wikis, Blogs, Social Networks). Powered by Ruby on Rails, RESTful Open APIs, and dynamic widgets.</p>
+        </div>
+
+        <div class="topic-card">
+          <h3><span class="topic-number">2</span> Web 3.0: Semantic Web, Mashups & RDF</h3>
+          <p>Web 3.0 structures web data so that intelligent search agents can deduce contextual meaning rather than just matching text strings. Built on <strong>RDF (Resource Description Framework)</strong> utilizing Subject-Predicate-Object triples.</p>
+        </div>
+
+        <div class="topic-card">
+          <h3><span class="topic-number">3</span> Search Engines, Recommender Systems & Edge Computing</h3>
+          <p>Modern information processing applies collaborative filtering models to personalize experiences, while <strong>Edge Computing</strong> pushes computations closer to the client rather than centralized servers.</p>
+        </div>
+
+        <!-- Last Topic in Unit 4 -->
+        <div class="topic-card">
+          <h3><span class="topic-number">4</span> Dark Mode in Web Development</h3>
+          <p>Implemented through CSS Custom Properties and hardware queries, reducing eye strain and saving battery life on OLED displays:</p>
+          <div class="code-container">
+            <div class="code-header"><span>Dark Mode Implementation</span><span>CSS Media Query</span></div>
+            <pre><code>@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #090d16;
+    --surface: #111827;
+    --text-main: #f9fafb;
+    --border: #1f2937;
+  }
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- 3-Button Navigation for Unit 4 -->
+        <div class="navigation-bar">
+          <button class="nav-btn btn-outline" onclick="goToView('unit-3')">← Previous: Unit 3</button>
+          <button class="nav-btn btn-outline" onclick="goToView('home')">🏠 Home / Syllabus</button>
+          <button class="nav-btn btn-solid-primary" onclick="goToView('unit-5')">Next: Unit 5 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 5: UNIT 5 NOTES -->
+    <div id="view-unit-5" class="view">
+      <div class="notes-wrapper">
+        <div class="breadcrumb">
+          <span onclick="goToView('home')">Syllabus</span> / <strong>Unit 5: Web 4.0 & Emerging Tech</strong>
+        </div>
+        <div class="notes-header">
+          <h2>Unit 5: Web 4.0, DWeb & Next-Gen Tech</h2>
+          <p>Quantum School of Technology • Duration: 7 Hours</p>
+        </div>
+
+        <div class="topic-card">
+          <h3><span class="topic-number">1</span> Web 4.0: AI-Powered Web & Personalized Content</h3>
+          <p>The symbiotic web connecting autonomous machine learning agents and humans, enabling adaptive UIs, natural language interfaces, and contextual content generation.</p>
+        </div>
+
+        <div class="topic-card">
+          <h3><span class="topic-number">2</span> Decentralized Web (DWeb) & Blockchain Integration</h3>
+          <p>Decentralized storage models (IPFS) and cryptographic ledgers (Ethereum, Solana) eliminate single points of failure, enabling tamper-proof identity systems and trustless protocols.</p>
+        </div>
+
+        <div class="topic-card">
+          <h3><span class="topic-number">3</span> IoT, AR & VR (WebXR) in Web Development</h3>
+          <p>Connecting physical sensors to web dashboards via WebSockets/MQTT, and rendering real-time spatial 3D scenes directly inside browsers using <strong>WebGL</strong> and the <strong>WebXR Device API</strong>.</p>
+        </div>
+
+        <!-- Last Topic in Unit 5 -->
+        <div class="topic-card">
+          <h3><span class="topic-number">4</span> Impact of 5G on Web Technologies</h3>
+          <p>Millimeter-wave frequencies offer sub-millisecond latencies and gigabit throughput. This allows browsers to run real-time cloud gaming, remote edge-rendered 3D simulations, and compute-heavy web pipelines smoothly.</p>
+        </div>
+
+        <!-- 3-Button Navigation for Unit 5: Previous, Home, End -->
+        <div class="navigation-bar">
+          <button class="nav-btn btn-outline" onclick="goToView('unit-4')">← Previous: Unit 4</button>
+          <button class="nav-btn btn-outline" onclick="goToView('home')">🏠 Home / Syllabus</button>
+          <button class="nav-btn btn-finish" onclick="showCompletionModal()">Finish Syllabus 🎉</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Completion Popup Modal -->
+  <div id="completionModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-icon">🎓</div>
+      <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.6rem;">Congratulations!</h2>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">
+        Aapne Quantum University ke <strong>Web Technology (CS35302)</strong> syllabus ke saare 5 Units complete kar liye hain!
+      </p>
+      <button class="nav-btn btn-solid-primary" style="width: 100%;" onclick="closeCompletionModal()">
+        Return to Home Dashboard
+      </button>
+    </div>
+  </div>
+
+  <!-- JavaScript Interaction Logic -->
+  <script>
+    // Navigation Logic
+    function goToView(targetId) {
+      const views = document.querySelectorAll('.view');
+      views.forEach(v => v.classList.remove('active'));
+
+      const active = document.getElementById('view-' + targetId);
+      if (active) {
+        active.classList.add('active');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Modal Handlers
+    function showCompletionModal() {
+      document.getElementById('completionModal').classList.add('active');
+    }
+
+    function closeCompletionModal() {
+      document.getElementById('completionModal').classList.remove('active');
+      goToView('home');
+    }
+
+    // 1. Dark Mode Toggle Logic
+    function toggleTheme() {
+      const body = document.body;
+      const themeIcon = document.getElementById('themeIcon');
+      const themeBtnText = document.querySelector('#themeBtn span:last-child');
+
+      body.classList.toggle('dark-mode');
+
+      if (body.classList.contains('dark-mode')) {
+        themeIcon.textContent = '☀️';
+        themeBtnText.textContent = 'Light';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        themeIcon.textContent = '🌙';
+        themeBtnText.textContent = 'Dark';
+        localStorage.setItem('theme', 'light');
+      }
+    }
+
+    // Load saved theme preference
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('themeIcon').textContent = '☀️';
+        document.querySelector('#themeBtn span:last-child').textContent = 'Light';
+      }
+    });
+
+    // 2. Live Search Filter Logic
+    function filterTopics() {
+      const query = document.getElementById('topicSearch').value.toLowerCase().trim();
+      const unitCards = document.querySelectorAll('#unitGrid .unit-card');
+      let visibleCount = 0;
+
+      unitCards.forEach(card => {
+        const title = card.querySelector('.unit-card-title').textContent.toLowerCase();
+        const tags = card.querySelector('.tag-cloud').textContent.toLowerCase();
+
+        if (title.includes(query) || tags.includes(query)) {
+          card.style.display = 'flex';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Show/Hide "No Results" message
+      const noResults = document.getElementById('noResults');
+      if (visibleCount === 0) {
+        noResults.style.display = 'block';
+      } else {
+        noResults.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>
